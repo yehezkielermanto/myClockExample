@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- tailwind css -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>My Clock</title>
+  </head>
+  <!-- custom style -->
+  <style>
+    .container {
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+    .container.dark {
+      box-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
+    }
+
+    html.dark {
+      --tw-bg-opacity: 1;
+      background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+      color: white;
+    }
+
+    html.dark .dark\:ml-6 {
+      margin-left: 1.5rem;
+    }
+  </style>
+  <body>
+    <h1 class="font-bold text-center my-[2rem] text-[4rem]">MY CLOCK</h1>
+    <p
+      class="text-center text-[2rem] underline underline-offset-8"
+      id="greeting"
+    ></p>
+    <div class="flex justify-center w-full">
+      <div
+        class="container w-[50%] mx-[3rem] my-[2rem] py-4 text-center rounded-lg sm:w-100 sm:mx-0"
+      >
+        <p class="lg:text-[4rem] sm:text-[100%] py-2" id="clock"></p>
+        <p class="lg:text-[2.5rem] sm:text-[100%] py-2" id="date"></p>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <p class="mx-2">Switch Mode</p>
+      <button
+        onclick="setTheme()"
+        class="w-12 h-6 rounded-full p-1 bg-gray-400 dark:bg-gray-600 transition-colors duration-500 ease-in focus:outline-none focus:ring-2 focus:ring-blue-700 dark:focus:ring-blue-600 focus:border-transparent"
+      >
+        <div
+          id="toggle"
+          class="rounded-full w-4 h-4 bg-green-600 dark:bg-blue-500 ml-0 dark:ml-6 pointer-events-none transition-all duration-300 ease-out"
+        ></div>
+      </button>
+    </div>
+    <!-- custom js -->
+    <script>
+      window.onload = function () {
+        // class of user
+        class User {
+          constructor(name) {
+            this.name = name
+          }
+        }
+        // function clock
+        function clock() {
+          let date = new Date()
+          let hour = date.getHours()
+          let minute = date.getMinutes()
+          let second = date.getSeconds()
+          let status = 'AM'
+          let greeting = ''
+
+          if (hour == 0) {
+            hour = 12
+          }
+          if (hour > 12) {
+            hour = hour - 12
+            status = 'PM'
+          }
+
+          // check if AM or PM
+          if (status == 'PM') {
+            greeting = 'Good Afternoon'
+          } else {
+            greeting = 'Good Morning'
+          }
+          hour = hour < 10 ? '0' + hour : hour
+          minute = minute < 10 ? '0' + minute : minute
+          second = second < 10 ? '0' + second : second
+
+          let time = hour + ':' + minute + ':' + second + '   ' + status
+          let appendClock = document.querySelector('#clock')
+          appendClock.innerHTML = time
+          appendClock.textContent = time
+
+          // create user
+          const userNow = new User('Yehezkiel')
+
+          // set greeting to user
+          let greetingUser = greeting + ' ' + userNow.name
+          let appendGreeting = document.querySelector('#greeting')
+          appendGreeting.innerHTML = greetingUser
+          appendGreeting.textContent = greetingUser
+
+          setTimeout(clock, 1000)
+        }
+        // function date
+        function showDate() {
+          let date = new Date()
+          let year = date.getFullYear()
+          let day = date.getDate()
+          const months = [
+            'Januari',
+            'Feburari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember',
+          ]
+          let month = months[date.getMonth()]
+          let dates = day + ' - ' + month + ' - ' + year
+          let appendDate = document.querySelector('#date')
+          appendDate.innerHTML = dates
+          appendDate.textContent = dates
+        }
+        clock()
+        showDate()
+      }
+
+      // set Theme
+      function setTheme(event) {
+        document.documentElement.classList.toggle('dark')
+        document.querySelector('.container').classList.toggle('dark')
+      }
+    </script>
+  </body>
+</html>
